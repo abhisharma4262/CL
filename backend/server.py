@@ -526,13 +526,42 @@ async def chat_with_ai(body: ChatRequest):
     await db.chat_messages.insert_one(user_msg)
 
     # Build context
-    system_prompt = "You are an AI underwriting assistant for myridius EVOQ Commercial Lending Workbench. You help commercial lending analysts understand loan applications, financial analysis, risk assessments, and AI agent decisions. Be concise, professional, and data-driven in your responses."
+    system_prompt = """You are an AI underwriting assistant for myridius EVOQ Commercial Lending Workbench. You help commercial lending analysts understand loan applications, financial analysis, risk assessments, and AI agent decisions.
+
+RESPONSE FORMAT RULES:
+- Always respond in plain, natural language — NEVER return JSON, code blocks, or raw data structures.
+- Be concise and to the point. Use short bullet points when listing multiple items.
+- Use markdown formatting: **bold** for emphasis, bullet points (- or *) for lists.
+- Keep responses brief (3-5 bullet points max) unless the user explicitly asks for a detailed explanation.
+- When referencing financial data, present it naturally (e.g., "Tesla's D/E ratio improved from 0.79 to 0.68") — never dump raw numbers or objects.
+- Sound like a knowledgeable analyst having a conversation, not a database query."""
 
     if body.application_id:
         app_data = await db.applications.find_one({"id": body.application_id}, {"_id": 0})
         if app_data:
-            context = json.dumps(app_data, indent=2, default=str)
-            system_prompt += f"\n\nYou are currently assisting with the following loan application:\n{context}"
+            # Provide structured summary instead of raw JSON dump
+            context_parts = [
+                f"Applicant: {app_data.get('applicant_name')} ({app_data.get('application_no')})",
+                f"Industry: {app_data.get('industry')} | Entity: {app_data.get('legal_entity_type')}",
+                f"Loan: {app_data.get('loan_amount_display')} | Stage: {app_data.get('application_stage')}",
+                f"AI Status: {app_data.get('application_status')} | Review: {app_data.get('review_status')}",
+                f"AI Recommendation: {app_data.get('ai_recommendation', {}).get('action')} — {app_data.get('ai_recommendation', {}).get('notes')}",
+                f"Summary: {app_data.get('application_summary')}",
+                f"Insights: {app_data.get('insights_synthesis')}",
+            ]
+            if app_data.get('company_insights'):
+                context_parts.append("Key Insights:\n" + "\n".join(f"  - {i}" for i in app_data['company_insights']))
+            if app_data.get('key_ratios'):
+                de = app_data['key_ratios'].get('debt_to_equity', [])
+                icr = app_data['key_ratios'].get('interest_coverage', [])
+                if de:
+                    context_parts.append(f"D/E Ratio: {', '.join(f'{d[\"year\"]}: {d[\"value\"]}' for d in de)}")
+                if icr:
+                    context_parts.append(f"ICR: {', '.join(f'{d[\"year\"]}: {d[\"value\"]}x' for d in icr)}")
+            if app_data.get('covenant_recommendations'):
+                context_parts.append("Covenants: " + "; ".join(f"{c['value']} {c['metric']}" for c in app_data['covenant_recommendations']))
+
+            system_prompt += f"\n\nCurrent application context:\n" + "\n".join(context_parts)
 
     # Get recent chat history for context
     history = await db.chat_messages.find(
