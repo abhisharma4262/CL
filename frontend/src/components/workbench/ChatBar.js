@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Sparkles, Send, X } from "lucide-react";
 import { api } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
+import MarkdownMessage from "@/components/shared/MarkdownMessage";
 
 export default function ChatBar() {
   const [message, setMessage] = useState("");
