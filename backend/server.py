@@ -560,8 +560,7 @@ async def chat_with_ai(body: ChatRequest):
             "content": response_text,
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
-        await db.chat_messages.insert_one({**ai_msg})
-        await db.chat_messages.update_one({"id": ai_msg_id}, {"$unset": {"_id": ""}})
+        await db.chat_messages.insert_one(ai_msg)
 
         return ChatResponse(response=response_text, message_id=ai_msg_id)
 
