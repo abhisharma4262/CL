@@ -58,12 +58,22 @@ function PortersForcesChart({ forces }) {
         </ResponsiveContainer>
       </div>
       <div className="mt-3 space-y-2">
-        {Object.entries(forces).map(([key, val]) => (
-          <div key={key} className="text-xs text-gray-600">
-            <span className="font-semibold text-gray-800">{val.description?.split(' - ')[0] || key} ({val.score}):</span>{' '}
-            {val.description?.split(' - ').slice(1).join(' - ') || val.description}
-          </div>
-        ))}
+        {[
+          { key: "threat_new_entrants", label: "Threat of New Entrants" },
+          { key: "supplier_power", label: "Supplier Power" },
+          { key: "buyer_power", label: "Buyer Power" },
+          { key: "threat_substitutes", label: "Threat of Substitutes" },
+          { key: "competitive_rivalry", label: "Competitive Rivalry" },
+        ].map(({ key, label }) => {
+          const val = forces[key];
+          if (!val) return null;
+          return (
+            <div key={key} className="text-xs text-gray-600">
+              <span className="font-semibold text-gray-800">{label} ({val.score}):</span>{' '}
+              {val.description}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
