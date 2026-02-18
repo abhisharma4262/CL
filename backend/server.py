@@ -555,11 +555,14 @@ RESPONSE FORMAT RULES:
                 de = app_data['key_ratios'].get('debt_to_equity', [])
                 icr = app_data['key_ratios'].get('interest_coverage', [])
                 if de:
-                    context_parts.append(f"D/E Ratio: {', '.join(f'{d[\"year\"]}: {d[\"value\"]}' for d in de)}")
+                    de_str = ', '.join(str(d['year']) + ': ' + str(d['value']) for d in de)
+                    context_parts.append(f"D/E Ratio: {de_str}")
                 if icr:
-                    context_parts.append(f"ICR: {', '.join(f'{d[\"year\"]}: {d[\"value\"]}x' for d in icr)}")
+                    icr_str = ', '.join(str(d['year']) + ': ' + str(d['value']) + 'x' for d in icr)
+                    context_parts.append(f"ICR: {icr_str}")
             if app_data.get('covenant_recommendations'):
-                context_parts.append("Covenants: " + "; ".join(f"{c['value']} {c['metric']}" for c in app_data['covenant_recommendations']))
+                cov_str = "; ".join(str(c['value']) + ' ' + str(c['metric']) for c in app_data['covenant_recommendations'])
+                context_parts.append(f"Covenants: {cov_str}")
 
             system_prompt += f"\n\nCurrent application context:\n" + "\n".join(context_parts)
 
