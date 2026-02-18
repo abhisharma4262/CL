@@ -1,0 +1,163 @@
+{
+  "identity": {
+    "name": "myridius EVOQ",
+    "tone": "Professional, Efficient, Data-Dense, Trustworthy, AI-Powered",
+    "theme_mode": "light",
+    "description": "A high-performance commercial lending workbench that blends human expertise with AI efficiency."
+  },
+  "typography": {
+    "primary_font": "Manrope",
+    "secondary_font": "IBM Plex Sans",
+    "usage": {
+      "headings": "Manrope, font-bold or font-extrabold, tracking-tight. Use for page titles and section headers.",
+      "body": "IBM Plex Sans, font-normal. Use for table data, chat text, and general content.",
+      "labels": "IBM Plex Sans, font-medium, uppercase, tracking-wider, text-xs. Use for column headers and small tags.",
+      "numbers": "IBM Plex Sans, tabular-nums. CRITICAL for financial data alignment."
+    }
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": "#55C9A6",
+      "foreground": "#FFFFFF",
+      "hover": "#34D399"
+    },
+    "background": {
+      "DEFAULT": "#F9FAFB",
+      "paper": "#FFFFFF",
+      "sidebar": "#F3F4F6",
+      "subtle": "#F3F4F6"
+    },
+    "text": {
+      "primary": "#111827",
+      "secondary": "#4B5563",
+      "muted": "#9CA3AF"
+    },
+    "status": {
+      "success": {
+        "bg": "#ECFDF5",
+        "text": "#047857",
+        "border": "#A7F3D0"
+      },
+      "warning": {
+        "bg": "#FFFBEB",
+        "text": "#B45309",
+        "border": "#FDE68A"
+      },
+      "error": {
+        "bg": "#FEF2F2",
+        "text": "#B91C1C",
+        "border": "#FECACA"
+      },
+      "info": {
+        "bg": "#EFF6FF",
+        "text": "#1D4ED8",
+        "border": "#BFDBFE"
+      },
+      "neutral": {
+        "bg": "#F3F4F6",
+        "text": "#374151",
+        "border": "#E5E7EB"
+      }
+    },
+    "border": {
+      "DEFAULT": "#E5E7EB",
+      "subtle": "#F3F4F6"
+    }
+  },
+  "layout": {
+    "structure": "Fixed left sidebar (w-64) + scrollable main content area.",
+    "spacing": {
+      "container_padding": "p-6 md:p-8",
+      "card_padding": "p-6",
+      "element_gap": "gap-6"
+    },
+    "grid": {
+      "dashboard_summary": "grid grid-cols-1 md:grid-cols-3 gap-6",
+      "detail_split": "grid grid-cols-12 gap-6 h-[calc(100vh-4rem)]"
+    },
+    "z_index": {
+      "header": 40,
+      "sidebar": 50,
+      "modal": 100,
+      "tooltip": 110
+    }
+  },
+  "components": {
+    "table": {
+      "style": "Clean, row-based. No vertical borders. Light horizontal borders.",
+      "header": "Sticky top, bg-gray-50/90 backdrop-blur, text-xs uppercase text-gray-500 font-medium.",
+      "row": "Hover: bg-gray-50 transition-colors. Cursor-pointer for expandable rows.",
+      "expand_animation": "Use Framer Motion AnimatePresence and layout props for smooth height transition.",
+      "badges": "Pill-shaped, px-2.5 py-0.5 text-xs font-medium rounded-full."
+    },
+    "cards": {
+      "base": "bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden",
+      "hover": "hover:shadow-md transition-shadow duration-200"
+    },
+    "chat": {
+      "container": "flex flex-col h-full bg-white border-r border-gray-200",
+      "bubbles": {
+        "ai": "bg-gray-100 text-gray-900 rounded-2xl rounded-tl-none p-4 max-w-[85%]",
+        "user": "bg-[#55C9A6] text-white rounded-2xl rounded-tr-none p-4 max-w-[85%] self-end"
+      },
+      "input": "sticky bottom-0 bg-white p-4 border-t border-gray-100"
+    },
+    "charts": {
+      "library": "recharts",
+      "radar": {
+        "colors": ["#55C9A6"],
+        "fillOpacity": 0.2,
+        "strokeWidth": 2
+      },
+      "bar_line": {
+        "bar_color": "#1F2937",
+        "line_color": "#55C9A6"
+      }
+    }
+  },
+  "motion": {
+    "defaults": {
+      "duration": 0.2,
+      "ease": "easeOut"
+    },
+    "expand": {
+      "initial": { "opacity": 0, "height": 0 },
+      "animate": { "opacity": 1, "height": "auto" },
+      "exit": { "opacity": 0, "height": 0 },
+      "transition": { "duration": 0.3, "ease": "easeInOut" }
+    }
+  },
+  "visual_enhancers": {
+    "glass": "backdrop-blur-md bg-white/70 border-b border-gray-200/50",
+    "shadows": "shadow-[0_2px_8px_rgba(0,0,0,0.04)]",
+    "gradients": "None. Use solid colors for professional look.",
+    "textures": "Subtle noise texture on sidebar background (optional)."
+  },
+  "image_urls": {
+    "backgrounds": [
+      "https://images.unsplash.com/photo-1760627927489-c0dc59976f13?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHw0fHxjb3Jwb3JhdGUlMjBvZmZpY2UlMjBza3lzY3JhcGVyJTIwZ2xhc3MlMjBidWlsZGluZyUyMGFic3RyYWN0fGVufDB8fHx8MTc3MTQwNDQ3NHww&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/18110484/pexels-photo-18110484.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    ],
+    "logos": [],
+    "avatars": []
+  },
+  "instructions_to_main_agent": [
+    "Implement the 'Workbench' as the landing page.",
+    "Use 'recharts' for all charts (Radar for Porter's 5 Forces, ComposedChart for Financials).",
+    "Ensure the expandable row uses Framer Motion for a smooth 'accordion' feel.",
+    "The sidebar navigation must be persistent.",
+    "Use 'sonner' for all toast notifications.",
+    "Strictly follow the color palette. Do not use default Tailwind blue.",
+    "Mock data should be realistic commercial lending data (Tesla, Acme Corp, etc.).",
+    "Add 'data-testid' to all interactive elements."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Don't make generic centered layouts.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Every interaction needs micro-animations.",
+    "Use 'sonner' for toasts.",
+    "Never use generic AI emojis.",
+    "Use 'lucide-react' for icons.",
+    "Ensure text contrast meets APCA standards."
+  ]
+}
