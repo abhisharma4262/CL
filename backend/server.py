@@ -523,8 +523,7 @@ async def chat_with_ai(body: ChatRequest):
         "content": body.message,
         "timestamp": datetime.now(timezone.utc).isoformat()
     }
-    await db.chat_messages.insert_one({**user_msg, "_id": None})
-    await db.chat_messages.update_one({"id": user_msg_id}, {"$unset": {"_id": ""}})
+    await db.chat_messages.insert_one(user_msg)
 
     # Build context
     system_prompt = "You are an AI underwriting assistant for myridius EVOQ Commercial Lending Workbench. You help commercial lending analysts understand loan applications, financial analysis, risk assessments, and AI agent decisions. Be concise, professional, and data-driven in your responses."
