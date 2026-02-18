@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Sparkles, Send } from "lucide-react";
 import { api } from "@/lib/api";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import MarkdownMessage from "@/components/shared/MarkdownMessage";
 
 export default function ChatPanel({ application }) {
   const [messages, setMessages] = useState([]);
