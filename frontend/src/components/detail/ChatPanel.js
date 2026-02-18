@@ -75,7 +75,7 @@ export default function ChatPanel({ application }) {
                     : "bg-gray-100 text-gray-800 rounded-2xl rounded-tl-none"
                 }`}
               >
-                {msg.content}
+                {msg.role === "user" ? msg.content : <MarkdownMessage content={msg.content} />}
               </div>
             </div>
           ))}
