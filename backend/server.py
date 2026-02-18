@@ -566,12 +566,11 @@ RESPONSE FORMAT RULES:
 
             system_prompt += f"\n\nCurrent application context:\n" + "\n".join(context_parts)
 
-    # Get recent chat history for context
+    # Get recent chat history for context (excluding current message which was just inserted)
     history = await db.chat_messages.find(
-        {"session_id": body.session_id},
+        {"session_id": body.session_id, "id": {"$ne": user_msg_id}},
         {"_id": 0}
-    ).sort("timestamp", -1).limit(10).to_list(10)
-    history.reverse()
+    ).sort("timestamp", 1).limit(20).to_list(20)
 
     try:
         chat = LlmChat(
@@ -580,6 +579,13 @@ RESPONSE FORMAT RULES:
             system_message=system_prompt
         ).with_model("gemini", "gemini-2.0-flash")
 
+        # Replay conversation history so the LLM has full context
+        for msg in history:
+            if msg.get("role") == "user":
+                await chat.send_message(UserMessage(text=msg["content"]))
+            # Assistant messages are automatically tracked by the library's session
+
+        # Now send the actual new message
         response_text = await chat.send_message(UserMessage(text=body.message))
 
         # Store assistant response
