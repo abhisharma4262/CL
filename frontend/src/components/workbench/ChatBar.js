@@ -66,7 +66,7 @@ export default function ChatBar() {
                       ? "bg-[#1a3a2a] text-white rounded-tr-none"
                       : "bg-gray-100 text-gray-800 rounded-tl-none"
                   }`}>
-                    {msg.content}
+                    {msg.role === "user" ? msg.content : <MarkdownMessage content={msg.content} />}
                   </div>
                 </div>
               ))}
