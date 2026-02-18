@@ -8,28 +8,37 @@ export default function ChatPanel({ application }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const bottomRef = useRef(null);
-  const sessionRef = useRef(`detail-${application?.id}-${Date.now()}`);
+  // Stable session ID per application — survives page reloads
+  const sessionId = application?.id ? `detail-${application.id}` : null;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Load chat history
+  // Load existing chat history on mount
   useEffect(() => {
-    if (!application?.id) return;
-    sessionRef.current = `detail-${application.id}-${Date.now()}`;
-  }, [application?.id]);
+    if (!sessionId) return;
+    setHistoryLoaded(false);
+    api.getChatHistory(sessionId).then((res) => {
+      const history = res.data.messages || [];
+      setMessages(history.map((m) => ({ role: m.role, content: m.content })));
+      setHistoryLoaded(true);
+    }).catch(() => {
+      setHistoryLoaded(true);
+    });
+  }, [sessionId]);
 
   const handleSend = async () => {
-    if (!input.trim() || loading) return;
+    if (!input.trim() || loading || !sessionId) return;
     const text = input.trim();
     setInput("");
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setLoading(true);
 
     try {
-      const res = await api.sendChat(sessionRef.current, text, application?.id);
+      const res = await api.sendChat(sessionId, text, application?.id);
       setMessages((prev) => [...prev, { role: "assistant", content: res.data.response }]);
     } catch {
       setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I encountered an error. Please try again." }]);
