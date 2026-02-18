@@ -10,7 +10,18 @@ export default function ChatBar() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
-  const sessionId = useRef(`workbench-${Date.now()}`);
+  // Stable session ID for the workbench chat — persists across page navigation
+  const SESSION_ID = "workbench-global";
+
+  // Load existing history on mount
+  useEffect(() => {
+    api.getChatHistory(SESSION_ID).then((res) => {
+      const history = res.data.messages || [];
+      if (history.length > 0) {
+        setMessages(history.map((m) => ({ role: m.role, content: m.content })));
+      }
+    }).catch(() => {});
+  }, []);
 
   const handleSend = async () => {
     if (!message.trim() || loading) return;
@@ -21,7 +32,7 @@ export default function ChatBar() {
     setLoading(true);
 
     try {
-      const res = await api.sendChat(sessionId.current, userMsg);
+      const res = await api.sendChat(SESSION_ID, userMsg);
       setMessages((prev) => [...prev, { role: "assistant", content: res.data.response }]);
     } catch {
       setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, I couldn't process that request. Please try again." }]);
