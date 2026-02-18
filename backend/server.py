@@ -566,26 +566,26 @@ RESPONSE FORMAT RULES:
 
             system_prompt += f"\n\nCurrent application context:\n" + "\n".join(context_parts)
 
-    # Get recent chat history for context (excluding current message which was just inserted)
+    # Get conversation history for context continuity (excluding the message just inserted)
     history = await db.chat_messages.find(
         {"session_id": body.session_id, "id": {"$ne": user_msg_id}},
         {"_id": 0}
     ).sort("timestamp", 1).limit(20).to_list(20)
 
+    # Build initial_messages with system prompt + conversation history
+    initial_messages = [{"role": "system", "content": system_prompt}]
+    for msg in history:
+        initial_messages.append({"role": msg["role"], "content": msg["content"]})
+
     try:
         chat = LlmChat(
             api_key=GEMINI_API_KEY,
             session_id=body.session_id,
-            system_message=system_prompt
+            system_message=system_prompt,
+            initial_messages=initial_messages,
         ).with_model("gemini", "gemini-2.0-flash")
 
-        # Replay conversation history so the LLM has full context
-        for msg in history:
-            if msg.get("role") == "user":
-                await chat.send_message(UserMessage(text=msg["content"]))
-            # Assistant messages are automatically tracked by the library's session
-
-        # Now send the actual new message
+        # Send only the new message — history is already loaded
         response_text = await chat.send_message(UserMessage(text=body.message))
 
         # Store assistant response
