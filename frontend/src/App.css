@@ -1,34 +1,63 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* App-level overrides */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #F9FAFB;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.page-content {
+  flex: 1;
+  overflow-y: auto;
 }
 
-.App-link {
-    color: #61dafb;
+/* Mini chart styling */
+.mini-chart .recharts-cartesian-axis-tick-value {
+  font-size: 10px;
+  fill: #6B7280;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Radar chart styling */
+.radar-chart .recharts-polar-angle-axis-tick-value {
+  font-size: 11px;
+  fill: #374151;
+}
+
+/* Status badge animations */
+.status-badge {
+  transition: all 0.15s ease-out;
+}
+.status-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+/* Chat message animation */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.chat-message-enter {
+  animation: messageSlideIn 0.25s ease-out;
+}
+
+/* Table row hover */
+.app-table-row {
+  transition: background-color 0.15s ease;
+}
+.app-table-row:hover {
+  background-color: #F9FAFB;
 }
