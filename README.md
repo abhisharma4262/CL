@@ -1,7 +1,7 @@
-# myridius EVOQ — Commercial Lending AI Workbench
+# Commercial Lending AI Workbench
 
 ## Overview
-myridius EVOQ is an AI-powered commercial lending workbench that automates how commercial loan applications are managed. Applications are ingested and processed using AI agents, with human analysts validating and overriding the AI's decisions.
+An AI-powered commercial lending workbench that automates how commercial loan applications are managed. Applications are ingested and processed using AI agents, with human analysts validating and overriding the AI's decisions.
 
 ## Architecture
 - **Frontend**: React 19 + Tailwind CSS + Shadcn/UI + Recharts + Framer Motion
